@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
+// cacheLife -> when to clear
+// cacheTag -> what to clear
+// To refresh instantly: revalidate() or revalidateTag()
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  cacheComponents: true,
+  reactCompiler: true,
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
 };
 
 export default nextConfig;
