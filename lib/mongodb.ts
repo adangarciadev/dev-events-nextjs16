@@ -6,18 +6,18 @@ type MongooseCache = {
   promise: Promise<typeof mongoose> | null;
 };
 
-// Extend the global object to include our mongoose cache
+// Extend the global object to include our Mongoose cache without clashing with the import
 declare global {
-  var mongoose: MongooseCache | undefined;
+  // eslint-disable-next-line no-var
+  var mongooseCache: MongooseCache | undefined;
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Initialize the cache on the global object to persist across hot reloads in development
-const cached: MongooseCache = global.mongoose || { conn: null, promise: null };
-
-if (!global.mongoose) {
-  global.mongoose = cached;
+const cached: MongooseCache = globalThis.mongooseCache || { conn: null, promise: null };
+if (!globalThis.mongooseCache) {
+  globalThis.mongooseCache = cached;
 }
 
 /**
