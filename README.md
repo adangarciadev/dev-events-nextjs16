@@ -7,8 +7,3 @@ while dynamic parts streams in with React Suspense
 
 git checkout -b implementing-posthog (para crear una nueva rama)
 git status
-
-mongodb
-
-adangg1988_db_user
-8dkMwssLS7PjGRnN
