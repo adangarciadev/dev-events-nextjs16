@@ -6,9 +6,21 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  reactCompiler: true,
+  // reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
   async rewrites() {
     return [
