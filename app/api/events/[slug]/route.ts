@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Sanitize slug (remove any potentual malicious input)
+    // Sanitize slug (remove any potential malicious input)
     const sanitizedSlug = slug.trim().toLowerCase();
 
     // Query event by slug
