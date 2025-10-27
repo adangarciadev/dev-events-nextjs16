@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Event created successfully",        event: createdEvent,
+        message: "Event created successfully",
+        event: createdEvent,
       },
       { status: 201 },
     );
