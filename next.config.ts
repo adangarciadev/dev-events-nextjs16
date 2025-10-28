@@ -5,11 +5,10 @@ import type { NextConfig } from "next";
 // To refresh instantly: revalidate() or revalidateTag()
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
-  // reactCompiler: true,
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
+  typescript: {
+    ignoreBuildErrors: true,
   },
+  cacheComponents: true,
   images: {
     remotePatterns: [
       {

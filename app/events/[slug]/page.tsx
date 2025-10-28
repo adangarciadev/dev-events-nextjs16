@@ -2,6 +2,7 @@ import BookEvent from "@/components/BookEvent";
 import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -48,6 +49,8 @@ const EventDetailsPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  "use cache";
+  cacheLife("hours");
   const { slug } = await params;
 
   let event;
@@ -89,6 +92,24 @@ const EventDetailsPage = async ({
     tags,
     organizer,
   } = event;
+
+  console.log("Event data:", { organizer, tags });
+
+  // Fix: Si tags es un array con un string JSON, lo parseamos
+  let actualTags = tags;
+  if (
+    Array.isArray(tags) &&
+    tags.length === 1 &&
+    typeof tags[0] === "string" &&
+    tags[0].startsWith("[")
+  ) {
+    try {
+      actualTags = JSON.parse(tags[0]);
+    } catch {
+      actualTags = [];
+    }
+  }
+  const actualOrganizer = organizer;
 
   if (!description) return notFound();
 
@@ -135,10 +156,10 @@ const EventDetailsPage = async ({
           <EventAgenda agendaItems={agenda} />
           <section className="flex-col-gap-2">
             <h2>About the Organizer</h2>
-            <p>{organizer}</p>
+            <p>{actualOrganizer}</p>
           </section>
 
-          <EventTags tags={tags} />
+          <EventTags tags={actualTags} />
         </div>
         {/* Right Side - Event Content */}
         <aside className="booking">
@@ -152,7 +173,7 @@ const EventDetailsPage = async ({
               <p className="text-sm">Be the first to book your spot!</p>
             )}
 
-            <BookEvent />
+            <BookEvent eventId={event._id} slug={event.slug} />
           </div>
         </aside>
       </div>
@@ -162,7 +183,7 @@ const EventDetailsPage = async ({
         <div className="events">
           {similarEvents.length > 0 &&
             similarEvents.map((similarEvent: IEvent) => (
-              <EventCard key={similarEvent._id.toString()} {...similarEvent} />
+              <EventCard key={similarEvent.title} {...similarEvent} />
             ))}
         </div>
       </div>
